@@ -67,17 +67,26 @@ public class HsqlDBTest {
 		int productID = 0;
 		Product result = myDAO.findProduct(productID);
 		assertEquals("Iron Iron", result.getName());
+                assertEquals(54f,result.getPrice(),0.001f);
 	}
-
+        
         @Test
-        public void testNewProduct()throws DAOException {
-            Product result = new Product(50,"Yoyo Cool", 5);           
-            assertEquals("Yoyo Cool",result.getName());
+        public void testNewProduct() throws DAOException {
+            Product result = new Product(54, "Yoyo Cool", 5f);
+            myDAO.newProduct(result);
+            assertEquals(myDAO.findProduct(54),result);
         }
-        @Test
-        public void testPriceOfProduct() throws DAOException {
-            Product result = myDAO.findProduct(0);
-            assertTrue(result.getPrice() >= 0);
+        
+        @Test (expected = DAOException.class)
+        public void testProductExisting() throws DAOException {
+            Product result = new Product(1,"Yoyo Cool",5f);
+            myDAO.newProduct(result);
+        }
+        
+        @Test(expected = DAOException.class)
+        public void testPositivePrice() throws SQLException, DAOException {
+            Product result = new Product(60,"Yoyo Super",-1f);
+            myDAO.newProduct(result);
         }
 
 

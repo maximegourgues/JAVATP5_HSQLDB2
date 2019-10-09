@@ -21,7 +21,7 @@ public class DAO {
 	 * @return le nom du client (LastName) ou null si pas trouvé
 	 * @throws SQLException 
 	 */
-	public String nameOfProduct(int id) throws SQLException {
+	public String nameOfProduct(int id) throws DAOException, SQLException {
 		String result = null;
 		
 		String sql = "SELECT Name FROM Product WHERE ID = ?";
@@ -44,15 +44,15 @@ public class DAO {
 
         public void newProduct(Product product) throws DAOException{
             
-            String sql = "INSERT INTO Product VALUES(?,?,?)";
+            String sql = "INSERT INTO PRODUCT VALUES(?,?,?)";
             try (Connection connection = myDataSource.getConnection();
 			PreparedStatement stmt = connection.prepareStatement(sql)){
                         stmt.setInt(1, product.getProductId());
                         stmt.setString(2, product.getName());
                         stmt.setFloat(3, product.getPrice());
-                        stmt.executeQuery();
                         
-			// Définir la valeur du paramètre
+                        stmt.executeUpdate();
+                        
 			
 		} catch (SQLException ex) {
 			Logger.getLogger("DAO").log(Level.SEVERE, null, ex);
