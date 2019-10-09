@@ -41,6 +41,20 @@ public class DAO {
 		return result;
         
 	}
+        public float priceOfProduct(int id)throws SQLException {
+            Float result = null;
+            String sql = "SELECT Price FROM Product WHERE ID = ?";
+            try(Connection myConnection = myDataSource.getConnection();
+                    PreparedStatement statement = myConnection.prepareStatement(sql)) {
+                statement.setInt(1, id);
+                try (ResultSet resultSet = statement.executeQuery()){
+                    if (resultSet.next()){
+                        result = resultSet.getFloat("PRICE");
+                    } 
+                }
+            }
+            return result;
+        }
         public void newProduct(Product product) throws DAOException{
             
             String sql = "INSERT INTO Product VALUES(?,?,?)";
